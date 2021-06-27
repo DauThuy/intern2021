@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson01 - VueJS</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+	<div id='app'>
+		<input type="text" name="" id="" v-model="name">
+		<p>{{name}}</p>
+
+		<hr>
+		<p>Cach 1: </p>
+		<button v-on:click="tanga2()">Tang a</button>
+		<button v-on:click="tangb2()">Tang b</button>
+
+		<p>a: {{a}}</p>
+		<p>b: {{b}}</p>
+		
+		<hr>
+		<p>Cach 2:</p>
+		<p>a: {{tanga}}</p>
+		<p>b: {{tangb}}</p>
+
+
+	</div>
+
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				name: 'Sky Albert',
+				a: 0,
+				b: 0,
+			},
+			/*chỉ gọi hàm riêng rẽ*/
+			computed: { 
+				tanga: function(){
+					console.log("func a");
+					return this.a;
+				},
+				tangb: function(){
+					console.log("func b");
+					return this.b;
+				}
+			},
+
+			/*gọi tất cả các hàm, thực thi hàm được chỉ định :)*/
+			methods: {
+				tanga2: function(){
+					console.log("func a2");
+					return this.a;
+				},
+				tangb2: function(){
+					console.log("func b2");
+					return this.b;
+				}
+			}
+		})
+	</script>
+</body>
+
+<!-- v-model: phạm vi toàn cục, thay đổi tất cả các name theo nội dung nhập vào thẻ input -->

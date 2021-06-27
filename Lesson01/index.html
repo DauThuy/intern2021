@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson01 - VueJS</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="obj">
+        <div v-on:mouseover="tinhToaDo">
+            <p v-once>{{noidung}} - {{showPost()}} - {{noidung}}</p> <!-- giữ noidung ko bị showPost set lại giá trị -->
+            <p>{{sayHello()}}</p>
+            <a v-bind:href="link">FB</a>    <!-- làm việc với properties của tag -->
+            <p v-html="testMaHTML"></p>     <!-- hiển thị mã HTML, thẻ p sẽ chứa thẻ a -->
+            <button v-on:click="countValue()">Click me</button>
+            <button v-on:click="count++">JS in VueJS</button>
+            <p>Count: {{count}}</p>
+            <p>Status: {{count > 5 ? 'count > 5' : 'count <= 5'}}</p>
+            <p> x: {{x}} - y: {{y}} </p> <!-- chỉ lấy được tọa độ trong phạm vi thẻ chứa nó -->
+            <p v-on:mouseover.stop>Click me to stop</p>
+
+            <input type="text" name="" @keyup.enter.space="banPhim"> <!-- shorthand của v-on:keyup.enter.space -->
+        </div>
+    </div>
+
+    <script>
+
+        <!-- Tất cả dữ liệu truyền qua HTML để ở dạng dữ liệu thô -->
+        new Vue({
+            el: '#obj',
+            data: {
+                noidung: 'hello ca nhaaaa',
+                link: 'https://www.facebook.com/dauthuyy',
+                testMaHTML: '<a href="getPassWord">Get password</a>',
+                count: 0,
+                x: 0,
+                y: 0
+            },
+
+            methods: {
+                sayHello: function(){
+                    return this.noidung;
+                },
+
+                showPost: function(){
+                    this.noidung = "Noi dung moi";
+                    return this.noidung;
+                },
+
+                countValue: function(){
+                    this.count++;
+                },
+
+                tinhToaDo: function(event){
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                },
+
+                banPhim: function(){
+                    alert('you are using keyboard');
+                }
+            },
+        });
+    </script>
+</body>
+</html>
+
+<!-- short-hand: https://vuejs.org/v2/guide/syntax.html#v-bind-Shorthand -->
