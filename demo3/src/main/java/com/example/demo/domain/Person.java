@@ -14,7 +14,7 @@ public class Person {
     private Integer id;
     private String name;
     private String email;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String phoneNumber;
     private String gender;
     @Override

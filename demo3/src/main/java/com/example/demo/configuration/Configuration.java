@@ -29,7 +29,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 
 @org.springframework.context.annotation.Configuration
@@ -44,8 +43,8 @@ public class Configuration {
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://ec2-107-22-83-3.compute-1.amazonaws.com:5432/ddj9sraarreotq");
+        dataSource.setDriverClassName("rg.postgresql.Driver");
+        dataSource.setUrl("dbc:postgresql:people");
         dataSource.setUsername("kgbhfadzzeosfl");
         dataSource.setPassword("539ead5c7f047f5b342358b803afb63e704b11ec491c730bfc8f3b2fe86937ba");
         return dataSource;
@@ -75,23 +74,21 @@ public class Configuration {
 
 
     @Bean
-    public JdbcBatchItemWriter<Person> personItemWriter() throws SQLException {
+    public JdbcBatchItemWriter<Person> personItemWriter() {
      JdbcBatchItemWriter<Person> itemWriter=new JdbcBatchItemWriter<>();
      itemWriter.setDataSource(this.dataSource);
-     itemWriter.setSql("INSERT INTO PEOPLE(id,name,email,dateOfBirth,phoneNumber,gender) VALUES (:id,:name,:email,:dateOfBirth,:phoneNumber,:gender)");
+     itemWriter.setSql("INSERT INTO PERSON VALUES (:id,:name,:email,:dateOfBirth,:phoneNumber,:gender)");
      itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
      itemWriter.afterPropertiesSet();
-        dataSource.getConnection().close();
      return itemWriter;
  }
 
     @Bean
-    public JdbcCursorItemReader<Person> cursorItemReader() throws SQLException {
+    public JdbcCursorItemReader<Person> cursorItemReader() {
         JdbcCursorItemReader<Person> reader=new JdbcCursorItemReader<>();
-        reader.setSql("select id,name,email,dateOfBirth, phoneNumber, gender from people");
+        reader.setSql("select * from person");
         reader.setDataSource(this.dataSource);
         reader.setRowMapper(new PersonRowMapper());
-        dataSource.getConnection().close();
         return  reader;
     }
 
@@ -105,7 +102,7 @@ public class Configuration {
     }
 
     @Bean
-    public Step Step1() throws SQLException {
+    public Step Step1() {
         return stepBuilderFactory.get("step1")
                 .<Person,Person>chunk(5)
                 .reader(personItemReader())
@@ -113,7 +110,7 @@ public class Configuration {
                 .build();
     }
     @Bean
-    public Step Step2() throws SQLException {
+    public Step Step2() {
         return stepBuilderFactory.get("step2")
                 .<Person,Person>chunk(5)
                 .reader(cursorItemReader())
@@ -122,9 +119,9 @@ public class Configuration {
     }
 
     @Bean
-    public Job job() throws SQLException {
+    public Job job() {
      return  jobBuilderFactory.get("job")
-             .start(Step1()).next(Step2()).build();
+             .start(Step1()).build();
     }
 
 
