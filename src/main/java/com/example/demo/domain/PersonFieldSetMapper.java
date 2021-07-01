@@ -12,7 +12,7 @@ public class PersonFieldSetMapper implements FieldSetMapper<Person> {
                 fieldSet.readInt("id"),
                 fieldSet.readString("name"),
                 fieldSet.readString("email"),
-                fieldSet.readString("dateOfBirth"),
+                fieldSet.readDate("dateOfBirth"),
                 fieldSet.readString("phoneNumber"),
                 fieldSet.readString("gender"));
     }

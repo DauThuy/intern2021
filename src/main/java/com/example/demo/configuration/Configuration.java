@@ -4,6 +4,7 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.demo.domain.Person;
 import com.example.demo.domain.PersonFieldSetMapper;
 import com.example.demo.domain.PersonRowMapper;
+import com.example.demo.domain.PersonValidator;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.batch.core.*;
@@ -23,6 +24,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 
 import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
+import org.springframework.batch.item.validator.ValidatingItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
@@ -34,6 +36,7 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 
 
 @org.springframework.context.annotation.Configuration
@@ -124,17 +127,27 @@ public class Configuration {
     }
 
     @Bean
+    public ValidatingItemProcessor<Person> itemProcessor() {
+        ValidatingItemProcessor<Person> personValidatingItemProcessor =
+                new ValidatingItemProcessor<>(new PersonValidator());
+        personValidatingItemProcessor.setFilter(true);
+        return personValidatingItemProcessor;
+    }
+
+
+    @Bean
     public Step Step1() throws SQLException {
         return stepBuilderFactory.get("step1")
-                .<Person,Person>chunk(5)
+                .<Person,Person>chunk(10)
                 .reader(personItemReader())
+                .processor(itemProcessor())
                 .writer(personItemWriter())
                 .build();
     }
     @Bean
     public Step Step2() throws Exception {
         return stepBuilderFactory.get("step2")
-                .<Person,Person>chunk(5)
+                .<Person,Person>chunk(10)
                 .reader(cursorItemReader())
                 .writer(step2PersonFlatFileItemWriter())
                 .build();
@@ -142,14 +155,8 @@ public class Configuration {
 
     @Bean
     public Job job() throws Exception {
-     return  jobBuilderFactory.get("job")
-             .start(Step1()).next(Step2()).build();
+        return  jobBuilderFactory.get("job")
+                .incrementer(new RunIdIncrementer())
+                .start(Step1()).next(Step2()).build();
     }
-
-
-
-
-
-
-
 }
