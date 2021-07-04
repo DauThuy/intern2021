@@ -1,0 +1,103 @@
+ npm -v
+ vue --version: version vue/cli: 
+
+- node module: tất cả các gói được chứa trong này
+
+- src: source code
+	+ main.js: file gốc để chạy ctr
+	+ App.vue: component gốc, chứa các Component khác
+	+ asset: hình ảnh, font chữ
+	+ components => chứa các component con
+
++ Component: 
+	+ 3 thành phần: 
+	. Template: html => hiển thị
+	. Script: js => xử lý
+	. Style: css => Làm đẹp
+		. Hỗ trợ scss, khi build sẽ ra css như bth
+		. Scoped style: style dành riêng cho Component hiện tại, 
+		                ko được dùng cho Component khác
+
+
++ Tạo component:
+	+ Tạo fie .vue
+	+ Import
+
++ Root element:
+	+ Bắt buộc: cần theo bao ngoài <div></div>
+
++ npm run serve: chạy lên server localhost 8080	
+	 . Chạy xong thư mục dist sẽ được build ra: .html, .js (deploy)
+
+
+** 2 ways binding
+	+ Bind dữ liệu 2 chiều
+	. Đồng bộ thành phần hiển thị và thành phần xử lý
+
+	. Data chứa các properties
+	+ func data(){}: luôn return về 1 data (và) bằng 1 obj
+		. vì bind 2 chiều giữa xử lý và hiển thị nên cần 1 hàm thay vì để biến tĩnh
+
+46'10s
+
+
+
+========Lifecycle==========
+- Mounted: có 1 obj rồi, gắn obj đó lên html (mount trong main.js)
+
+- Binding: 
+	+ Đẩy data từ dưới data lên
+	+ Value binding
+	+ Properties binding
+	. v-bind[tên thuộc tính]="biến" //:id="";
+
+- Model: 
+	+ Liên kết element (thẻ) với properties	
+	+ Chỉ định 1 element vào 1 biến
+
+- Event handling:
+	+ Bắt sự kiện từ các element
+	+ v-on:[tên sự kiện]="func()"
+	+ Bắt prevent default
+		. Hủy bỏ event mặc định của element: bth submit thì gửi data đi /abc, nhưng khi prevent
+		thì nó sẽ ko được gửi đi nữa
+		. Chặn load lại trang
+	+ gói vue-debounce: hoãn 1 thời gian, rồi sau đó mới làm
+	npmjs.com/package/vue-debounce
+
+- Ref: 
+	+ Ánh xạ đến chính element, tương tự như id?
+
+- Conditional rendering: Render theo điều kiện
+	+ v-show: ẩn/hiện theo điều kiện
+	+ v-hide: ngược lại
+	+ v-if: ẩn/hiện element theo điều kiện
+	+ v-else
+	+ v-else-if
+
+- List rendering
+
+- Watch: 
+    + vue obj theo dõi sự thay đổi của Data
+    + Khi data thay đổi sẽ gọi đến function trong watch
+    + Theo dõi sự thay đổi của data
+
+- hooks:
+    + mounted: chạy đầu tiên (dùng load API)
+
+- Component: 
+    
+- Props:
+    + Đẩy data từ component cha sang component con
+    + Dùng mảng tên các props
+    + Giống như data nhưng được lây từ bên ngoài vào
+
+- Filter:
+    + Mỗi 1 component có 2 thành phần:
+        + Template: hiển thị    
+        + Script: xử lý
+    + Biến đổi data trước khi được render ra
+
+	
+
+
